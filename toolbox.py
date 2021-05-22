@@ -51,7 +51,7 @@ def append_history(history, acc, val_acc, loss, val_loss):
     val_loss = np.concatenate( ( val_loss, np.array(history.history['val_loss'])))
     return acc, val_acc, loss, val_loss
 
-def plot_confusion_matrix(cm, class_names, if_save = True, file_path = ''):
+def plot_confusion_matrix(cm, class_names, if_save = True, file_path = '', acc=0):
     """
     Returns a matplotlib figure containing the plotted confusion matrix.
     
@@ -61,7 +61,7 @@ def plot_confusion_matrix(cm, class_names, if_save = True, file_path = ''):
     """
     figure = plt.figure(figsize=(len(class_names)/2, len(class_names)/2))
     plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-    plt.title("Confusion matrix")
+    plt.title("Confusion matrix, acc:"+str(round(acc,4)))
     plt.colorbar()
     tick_marks = np.arange(len(class_names))
     plt.xticks(tick_marks, class_names, rotation=45)
