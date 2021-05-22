@@ -20,63 +20,15 @@ from sklearn.metrics import confusion_matrix
 outfolder = 'outputs/'
 model_type = 'TConv'
 modelsavefile = 'model/'+model_type+'.h5'
-
-
-m_person = 3
 numClass = 20
 
+# prepare data
+# leave recording out
 X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut(list(range(1,7)))
-
-#%% P1 train, P2 test, seen one session by early stopping
-
-m_person = 1
-X=np.load('data/P'+str(m_person)+'_X.npy')
-y=np.load('data/P'+str(m_person)+'_y.npy')
-y=y-1
-X=np.expand_dims(X,3)
-y_cat=tools.label2categorical(y,numClass) #from (windows,1) to (windows,20)
-
-X_train = X
-y_train = y_cat
-
-m_person = 2
-X=np.load('data/P'+str(m_person)+'_X.npy')
-y=np.load('data/P'+str(m_person)+'_y.npy')
-y=y-1
-X=np.expand_dims(X,3)
-y_cat=tools.label2categorical(y,numClass) #from (windows,1) to (windows,20)
-
-ind_valid = range(0,80)
-ind_test  = range(80,400)
-X_valid = X[ind_valid, :, :, :]
-X_test  = X[ind_test,  :, :, :]
-y_valid = y_cat[ind_valid,:]
-y_test  = y[ind_test]
-#%% P1 train, P2 test, stranger
-
-m_person = 1
-X=np.load('data/P'+str(m_person)+'_X.npy')
-y=np.load('data/P'+str(m_person)+'_y.npy')
-y=y-1
-X=np.expand_dims(X,3)
-y_cat=tools.label2categorical(y,numClass) #from (windows,1) to (windows,20)
-
-ind_train = range(0,400)
-ind_valid = range(320,400)
-
-X_train = X[ind_train, :, :, :]
-X_valid = X[ind_valid, :, :, :]
-y_train = y_cat[ind_train,:]
-y_valid = y_cat[ind_valid,:]
-
-m_person = 2
-X=np.load('data/P'+str(m_person)+'_X.npy')
-y=np.load('data/P'+str(m_person)+'_y.npy')
-y=y-1
-X=np.expand_dims(X,3)
-y_cat=tools.label2categorical(y,numClass) #from (windows,1) to (windows,20)
-X_test  = X
-y_test  = y
+# leave persons out
+X_train, X_valid, X_test, y_train, y_valid, y_test = DP.LeavePersonOut_Stranger(list(range(1,6)),[6])
+# leave persons out 
+X_train, X_valid, X_test, y_train, y_valid, y_test = DP.LeavePersonOut_Acquaintance(list(range(1,6)),[6])
 
 #%% prepare model
 model = MB.build_TConv(filters = 40, kernel = (40,4), dense=100)

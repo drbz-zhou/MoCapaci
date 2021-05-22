@@ -1,6 +1,6 @@
-P1: Luis
-P2: Juan
-P3: Suh
-P4: Hymalai
-P5: Jane
-P6: Yunmin
+P0: Luis
+P1: Juan
+P2: Suh
+P3: Hymalai
+P4: Jane
+P5: Yunmin
