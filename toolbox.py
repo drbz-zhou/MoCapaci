@@ -12,6 +12,17 @@ import matplotlib.pyplot as plt
 from tensorflow import keras
 from datetime import datetime
 
+def tf_mem_patch():
+    # to cure tensorflow memory allocation problem
+    from tensorflow.compat.v1 import ConfigProto
+    from tensorflow.compat.v1 import InteractiveSession
+    config = ConfigProto()
+    config.gpu_options.per_process_gpu_memory_fraction = 0.2
+    config.gpu_options.allow_growth = True
+    session = InteractiveSession(config=config)
+    # end curing memory allocation problem
+    return session
+
 def label2categorical(m_labels, numClass):
     m_labels_exp = np.zeros( ( len(m_labels), numClass ) )
     for i in range (0, len(m_labels)):
