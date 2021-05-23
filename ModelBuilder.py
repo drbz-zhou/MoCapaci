@@ -23,6 +23,7 @@ def build_TConv(filters = 40, kernel = (10,4), dense = 100, numClass = 20):
         layers.Dropout(0.2),
         layers.Flatten(),
         layers.Dense(dense, activation='relu'),
+        layers.Dropout(0.2),
         layers.Dense(numClass, activation='softmax')
     ])
     return model
