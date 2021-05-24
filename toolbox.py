@@ -39,7 +39,7 @@ def train_step(model, epoch, m_data_train, m_y_train, m_data_valid, m_y_valid, m
               validation_data = (m_data_valid, m_y_valid),
               callbacks=[cb_checkpoint, cb_earlystop],
               #callbacks=[cb_earlystop],  #sometimes can't save model because of h5 bug, early stop restore best weights
-              verbose = 1
+              verbose = 2
         )
     return model, history
 
@@ -72,7 +72,7 @@ def plot_confusion_matrix(cm, class_names, if_save = True, file_path = '', acc=0
     """
     figure = plt.figure(figsize=(len(class_names)/2, len(class_names)/2))
     plt.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-    plt.title("Confusion matrix, acc:"+str(round(acc,4)))
+    plt.title("CM "+file_path+", acc:"+str(round(acc,4)))
     plt.colorbar()
     tick_marks = np.arange(len(class_names))
     plt.xticks(tick_marks, class_names, rotation=45)

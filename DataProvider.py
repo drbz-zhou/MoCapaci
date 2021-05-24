@@ -13,16 +13,26 @@ def loadXY(m_person):
     y=y-1
     return X, y
 
-def Individual_LeaveRecOut(m_person=1):
+def Individual_LeaveRecOut(m_person=1, m_rec=0):
     numClass = 20
     X, y = loadXY(m_person)
     #expanding dim only needed if channels are taken into the 2D format, virtually adding 1 channel at the end of dims
     X=np.expand_dims(X,3)
     #train-valid-test
-    ind_train = range(0,300)  #consider to parameterize
-    ind_valid = range(300,320)#consider to parameterize
-    ind_test  = range(320,400)#consider to parameterize
-    
+    #ind_train = range(0,300)  #consider to parameterize
+    #ind_valid = range(300,320)#consider to parameterize
+    #ind_test  = range(320,400)#consider to parameterize
+    ind_test = list(range(80*m_rec,80*(m_rec+1)))
+    ind_train = list(range(0,400))
+    if m_rec==0:
+        ind_valid = list(range(380,400))
+    else:
+        ind_valid = list(range(80*m_rec-20, 80*m_rec))
+    for i in ind_test:
+        ind_train.remove(i)
+    for i in ind_valid:
+        ind_train.remove(i)
+        
     X_train = X[ind_train, :, :, :]
     X_valid = X[ind_valid, :, :, :]
     X_test  = X[ind_test,  :, :, :]

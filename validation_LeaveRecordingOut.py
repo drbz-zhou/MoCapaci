@@ -35,9 +35,11 @@ for m_rec in range(5):
     elif model_type == 'Conv_LSTM':
         model = MB.build_Conv_LSTM(conv_filters = 20, conv_kernel = (40,4), lstm_units = 40, dense = 100, numClass = 20)
         
-    m_opt = keras.optimizers.Adam(learning_rate=0.0005)
+    #m_opt = keras.optimizers.Adam(learning_rate=0.0005)
+    m_opt = keras.optimizers.SGD(learning_rate=0.001, momentum=0.0001)
+    #m_opt = keras.optimizers.RMSprop(learning_rate=0.001, momentum=0.0001)
     model.compile(optimizer=m_opt,
-                  loss=keras.losses.BinaryCrossentropy(from_logits=True),
+                  loss=keras.losses.BinaryCrossentropy(),
                   metrics=['accuracy'])
     model.summary()
     #%% train model

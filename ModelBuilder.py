@@ -17,8 +17,8 @@ def retur_model(model_type = 'TConv'):
 
 def build_TConv(filters = 40, kernel = (10,4), dense = 100, numClass = 20):
     model = keras.models.Sequential([
-        layers.AveragePooling2D(pool_size=(5, 1), strides=(2,1), padding='same', input_shape=(400,4,1)),
-        layers.Conv2D( filters = filters, kernel_size = kernel, padding='same', activation='relu', input_shape=(200,4,1)),
+        #layers.AveragePooling2D(pool_size=(5, 1), strides=(2,1), padding='same', input_shape=(400,4,1)),
+        layers.Conv2D( filters = filters, kernel_size = kernel, padding='same', activation='relu', input_shape=(400,4,1)),
         layers.MaxPooling2D(pool_size=(10, 1)),
         layers.Dropout(0.2),
         layers.Conv2D( filters = filters, kernel_size = kernel, padding='same', activation='relu'),
