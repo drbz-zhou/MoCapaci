@@ -5,4 +5,5 @@ P3: Hymalai
 P4: Jane
 P5: Yunmin
 P6: Ivona
-P7: Bian
+P7: MariaJandra
+P8: Bian
