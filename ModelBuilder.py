@@ -6,6 +6,7 @@ Created on Sat May 22 13:48:15 2021
 """
 from tensorflow import keras
 from tensorflow.keras import layers
+import ModelBuilder_TransformerEncoder as MB_TF
 
 def retur_model(model_type = 'TConv'):
     if model_type == 'TConv':
@@ -67,3 +68,6 @@ def build_Conv_LSTM(conv_filters = 40, conv_kernel = (10,4), lstm_units = 100, d
         layers.Dense(numClass, activation='softmax')
     ])
     return model
+
+def build_TfEncoder(batch):
+    return MB_TF.get_model(batch)

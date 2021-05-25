@@ -16,13 +16,14 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/'
-model_type = 'TConv'  # TConv, LSTM, Conv_LSTM
+model_type = 'TfEncoder'  # TConv, LSTM, Conv_LSTM, TfEncoder
 modelsavefile = 'model/'+model_type+'.h5'
 numClass = 20
 m_population = 6 
 cm_all = np.zeros((numClass, numClass, 0))
+batch = 120
 
-for m_rec in range(5):
+for m_rec in range(m_population):
     # leave recording out
     X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut(list(range(m_population)), m_rec)
     
@@ -34,9 +35,11 @@ for m_rec in range(5):
         model = MB.build_LSTM(lstm_units = 40, dense=100)
     elif model_type == 'Conv_LSTM':
         model = MB.build_Conv_LSTM(conv_filters = 20, conv_kernel = (40,4), lstm_units = 40, dense = 100, numClass = 20)
-        
-    #m_opt = keras.optimizers.Adam(learning_rate=0.0005)
-    m_opt = keras.optimizers.SGD(learning_rate=0.001, momentum=0.0001)
+    elif model_type == 'TfEncoder':
+        model = MB.build_TfEncoder(batch)
+    # optimizer
+    m_opt = keras.optimizers.Adam(learning_rate=0.0005)
+    #m_opt = keras.optimizers.SGD(learning_rate=0.001, momentum=0.0001)
     #m_opt = keras.optimizers.RMSprop(learning_rate=0.001, momentum=0.0001)
     model.compile(optimizer=m_opt,
                   loss=keras.losses.BinaryCrossentropy(),
@@ -49,7 +52,6 @@ for m_rec in range(5):
     val_loss = []
     patience = 1000
     epoch = 50000
-    batch = 120
     model, history = tools.train_step(model, epoch, X_train, y_train, X_valid, y_valid, 
                                       modelsavefile, Patience = patience, batch_size = batch)
     acc, val_acc, loss, val_loss = tools.append_history(history, acc, val_acc, loss, val_loss)
@@ -57,6 +59,7 @@ for m_rec in range(5):
     #%% test
     model.load_weights(modelsavefile) #model needs to be built first 
     y_predict = model.predict(X_test)
+    
     acc_test = sum(y_test == np.argmax(y_predict, axis=1)) / y_test.shape[0]
     cm = confusion_matrix(y_test, np.argmax(y_predict, axis=1))
     tools.plot_confusion_matrix(cm, range(1, numClass+1), file_path=outfolder+'LeaveRecOut_'+str(m_rec)+'_'+model_type,acc=acc_test)
