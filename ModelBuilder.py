@@ -90,6 +90,22 @@ def build_Conv_LSTM(conv_filters = 40, conv_kernel = (10,4), lstm_units = 100, d
         layers.Dense(numClass, activation='softmax')
     ])
     return model
-
+def build_Conv1D_LSTM(conv_filters = 40, conv_kernel = (10,4), lstm_units = 100, dense = 100, numClass = 20):
+    model = keras.models.Sequential([
+        # Shape [batch, time, features] => [batch, 50, 5903]
+        layers.Reshape((400, 4), input_shape=(400,4,1)),
+        layers.Conv1D( filters = conv_filters, kernel_size = conv_kernel, padding='same', activation='relu', input_shape=(400,4)),
+        #layers.Reshape((400, 4*conv_filters), input_shape=(400,4,conv_filters)),
+        layers.BatchNormalization(),
+        layers.Dropout(0.2),
+        layers.LSTM(lstm_units, input_shape=(400,4)),
+        layers.BatchNormalization(),
+        layers.Dropout(0.2),
+        layers.Dense(dense, activation='relu'),
+        layers.BatchNormalization(),
+        layers.Dropout(0.2),
+        layers.Dense(numClass, activation='softmax')
+    ])
+    return model
 def build_TfEncoder(batch):
     return MB_TF.get_model(batch)

@@ -16,7 +16,7 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/'
-model_type = 'Cov1D'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder
+model_type = 'Conv1D_LSTM'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM
 modelsavefile = 'model/'+model_type+'.h5'
 numClass = 20
 m_population = 8
@@ -38,6 +38,8 @@ for m_rec in range(numRec):
         model = MB.build_LSTM(lstm_units = 40, dense=100)
     elif model_type == 'Conv_LSTM':
         model = MB.build_Conv_LSTM(conv_filters = 20, conv_kernel = (40,4), lstm_units = 40, dense = 100, numClass = 20)
+    elif model_type == 'Conv1D_LSTM':
+        model = MB.build_Conv1D_LSTM(conv_filters = 20, conv_kernel = (40), lstm_units = 40, dense = 100, numClass = 20)
     elif model_type == 'TfEncoder':
         model = MB.build_TfEncoder(batch)
     # optimizer
