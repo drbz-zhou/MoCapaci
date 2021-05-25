@@ -16,6 +16,28 @@ def retur_model(model_type = 'TConv'):
     #not in use because need to pass the parameters
     return model
 
+def build_Conv1D(filters = 40, kernel = (10), dense = 100, numClass = 20):
+    model = keras.models.Sequential([
+        #layers.AveragePooling2D(pool_size=(5, 1), strides=(2,1), padding='same', input_shape=(400,4,1)),
+        layers.Reshape((400, 4), input_shape=(400,4,1)),
+        layers.Conv1D( filters = filters, kernel_size = kernel, padding='same', activation='relu', input_shape=(400,4)),
+        layers.MaxPooling1D(pool_size=(10)),
+        layers.Dropout(0.2),
+        layers.Conv1D( filters = filters, kernel_size = kernel, padding='same', activation='relu'),
+        layers.BatchNormalization(),
+        layers.MaxPooling1D(pool_size=(10)),
+        layers.Dropout(0.2),
+        layers.Conv1D( filters = filters, kernel_size = kernel, padding='same', activation='relu'),
+        layers.BatchNormalization(),
+        #layers.MaxPooling2D(pool_size=(10, 1)),
+        layers.Dropout(0.2),
+        layers.Flatten(),
+        layers.Dense(dense, activation='relu'),
+        layers.Dropout(0.2),
+        layers.Dense(numClass, activation='softmax')
+    ])
+    return model
+
 def build_TConv(filters = 40, kernel = (10,4), dense = 100, numClass = 20):
     model = keras.models.Sequential([
         #layers.AveragePooling2D(pool_size=(5, 1), strides=(2,1), padding='same', input_shape=(400,4,1)),

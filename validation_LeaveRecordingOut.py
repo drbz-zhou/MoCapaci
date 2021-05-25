@@ -16,14 +16,15 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/'
-model_type = 'TfEncoder'  # TConv, LSTM, Conv_LSTM, TfEncoder
+model_type = 'Cov1D'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder
 modelsavefile = 'model/'+model_type+'.h5'
 numClass = 20
-m_population = 6 
+m_population = 8
 cm_all = np.zeros((numClass, numClass, 0))
 batch = 120
+numRec = 5
 
-for m_rec in range(m_population):
+for m_rec in range(numRec):
     # leave recording out
     X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut(list(range(m_population)), m_rec)
     
@@ -31,6 +32,8 @@ for m_rec in range(m_population):
     
     if model_type == 'TConv':
         model = MB.build_TConv(filters = 40, kernel = (40,4), dense=100)
+    elif model_type == 'Cov1D':
+        model = MB.build_Conv1D(filters = 40, kernel = (40), dense=100)
     elif model_type == 'LSTM':
         model = MB.build_LSTM(lstm_units = 40, dense=100)
     elif model_type == 'Conv_LSTM':
@@ -38,7 +41,7 @@ for m_rec in range(m_population):
     elif model_type == 'TfEncoder':
         model = MB.build_TfEncoder(batch)
     # optimizer
-    m_opt = keras.optimizers.Adam(learning_rate=0.0005)
+    m_opt = keras.optimizers.Adam(learning_rate=0.0001)
     #m_opt = keras.optimizers.SGD(learning_rate=0.001, momentum=0.0001)
     #m_opt = keras.optimizers.RMSprop(learning_rate=0.001, momentum=0.0001)
     model.compile(optimizer=m_opt,
