@@ -38,6 +38,37 @@ def build_Conv1D(filters = 40, kernel = (10), dense = 100, numClass = 20):
     ])
     return model
 
+def build_ResConv1D(filters = 40, kernel = (10), dense = 100, numClass = 20):
+    m_input = keras.Input(shape = (400, 4, 1))
+    m_output = layers.Reshape((400, 4), input_shape=(400,4,1))(m_input)
+    m_output_res1 = layers.Conv1D( filters = filters, kernel_size = kernel, 
+                             padding='same', activation='relu', input_shape=(400,4))(m_output)
+    m_output = layers.MaxPooling1D(pool_size=(10))(m_output_res1)
+    m_output = layers.Dropout(0.2)(m_output)
+    
+    m_output_res2 = layers.Conv1D( filters = filters, kernel_size = kernel, 
+                             padding='same', activation='relu', input_shape=(400,4))(m_output)
+    m_output = layers.BatchNormalization()(m_output_res2)
+    m_output = layers.MaxPooling1D(pool_size=(10))(m_output)
+    m_output = layers.Dropout(0.2)(m_output)
+    
+    m_output_res3 = layers.Conv1D( filters = filters, kernel_size = kernel, 
+                             padding='same', activation='relu', input_shape=(400,4))(m_output)
+    m_output = layers.BatchNormalization()(m_output_res3)
+    m_output = layers.Dropout(0.2)(m_output)
+    m_output = layers.Flatten()(m_output)
+    
+    m_output = layers.Concatenate()([layers.Flatten()(m_output_res2), m_output])
+    m_output = layers.Dense(dense, activation='relu')(m_output)
+    m_output = layers.Dropout(0.2)(m_output)
+    m_output = layers.Dense(numClass, activation='softmax')(m_output)
+        
+    model = keras.Model(
+        inputs = m_input,
+        outputs = m_output,
+    )
+    return model
+
 def build_TConv(filters = 40, kernel = (10,4), dense = 100, numClass = 20):
     model = keras.models.Sequential([
         #layers.AveragePooling2D(pool_size=(5, 1), strides=(2,1), padding='same', input_shape=(400,4,1)),

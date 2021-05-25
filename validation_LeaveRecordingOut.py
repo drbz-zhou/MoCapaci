@@ -16,17 +16,18 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/'
-model_type = 'Conv1D_LSTM'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM
+model_type = 'Cov1D'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
 modelsavefile = 'model/'+model_type+'.h5'
 numClass = 20
-m_population = 8
+m_population = 9
 cm_all = np.zeros((numClass, numClass, 0))
 batch = 120
 numRec = 5
 
 for m_rec in range(numRec):
     # leave recording out
-    X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut(list(range(m_population)), m_rec)
+    #X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut(list(range(m_population)), m_rec)
+    X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut([0,1,2,3,5,6,7,8], m_rec)
     
     #%% prepare model
     
@@ -34,6 +35,8 @@ for m_rec in range(numRec):
         model = MB.build_TConv(filters = 40, kernel = (40,4), dense=100)
     elif model_type == 'Cov1D':
         model = MB.build_Conv1D(filters = 40, kernel = (40), dense=100)
+    elif model_type == 'ResConv1D':
+        model = MB.build_ResConv1D(filters = 40, kernel = (40), dense=100)
     elif model_type == 'LSTM':
         model = MB.build_LSTM(lstm_units = 40, dense=100)
     elif model_type == 'Conv_LSTM':
