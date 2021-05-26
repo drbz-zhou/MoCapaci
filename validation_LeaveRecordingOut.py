@@ -22,7 +22,7 @@ m_population = 10
 cm_all = np.zeros((numClass, numClass, 0))
 batch = 400
 numRec = 5
-logFile = tools.create_log(outfolder,['condition','best valid acc','best test_acc'])
+logFile = tools.create_log(outfolder,['condition','best valid acc','best test acc'])
 
 
 for model_type in model_list:
