@@ -53,7 +53,7 @@ for m_test in range(m_population):
         elif model_type == 'TfEncoder':
             model = MB.build_TfEncoder(batch)
         
-        m_opt = keras.optimizers.Adam(learning_rate=0.0005)
+        m_opt = keras.optimizers.Adam(learning_rate=0.0001)
         model.compile(optimizer=m_opt,
                       loss=keras.losses.BinaryCrossentropy(),
                       metrics=['accuracy'])
