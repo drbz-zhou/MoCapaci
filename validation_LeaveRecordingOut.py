@@ -16,13 +16,13 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LRO/'
-model_list = ['Cov1D','TConv','ResConv1D','LSTM','Conv_LSTM','TfEncoder','Conv1D_LSTM']
+model_list = ['Cov1D','TConv','ResConv1D','TfEncoder'] #'Cov1D','TConv','ResConv1D','LSTM','Conv1D_LSTM','Conv_LSTM','TfEncoder',
 model_type = 'LSTM'  # Cov1D, TConv, ResConv1D, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM
 modelsavefile = 'model/'+model_type+'.h5'
 numClass = 20
-m_population = 9
+m_population = 10
 cm_all = np.zeros((numClass, numClass, 0))
-batch = 400
+batch = 240
 numRec = 5
 for model_type in model_list:
     for m_rec in range(numRec):
