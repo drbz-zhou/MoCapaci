@@ -79,7 +79,7 @@ for model_type in model_list:
         
         print(acc_test)
         print(cm)
-        tools.write_log_line(logFile,[model_type+str(m_rec),val_acc.max(),acc_test])
+        tools.write_log_line(logFile,[model_type+'_LRO_'+str(m_rec),round(val_acc.max(),4),acc_test])
     cm = np.sum(cm_all,2)
     acc = np.sum(cm*np.eye(numClass, numClass)) / np.sum(cm)
     tools.plot_confusion_matrix(cm, range(1, numClass+1), file_path=outfolder+'Result_LRO_'+model_type,acc=acc)

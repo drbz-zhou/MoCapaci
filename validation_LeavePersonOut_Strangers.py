@@ -17,12 +17,14 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LPO_AS/'
-model_type = 'Cov1D'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
+model_type = 'TConv'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
 modelsavefile = 'model/'+model_type+'_LPO_AS.h5'
 numClass = 20
-m_population = 9
-batch = 120
+m_population = 10
+batch = 240
 cm_all = np.zeros((numClass, numClass, 0))
+logFile = tools.create_log(outfolder,['condition','testID','validID','best valid acc','best test acc'])
+
 for m_test in range(m_population):
     
     m_train = list(range(m_population))
@@ -81,6 +83,7 @@ for m_test in range(m_population):
         
         print(acc_test)
         print(cm)
+        tools.write_log_line(logFile,[model_type+'LPO_'+str(m_test)+'_'+str(m_valid),m_test,m_valid,round(val_acc.max(),4),round(acc_test,4)])
 
 cm = np.sum(cm_all,2)
 acc = np.sum(cm*np.eye(numClass, numClass)) / np.sum(cm)
