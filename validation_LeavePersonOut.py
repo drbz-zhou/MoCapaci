@@ -24,6 +24,7 @@ modelsavefile = 'model/'+model_type+'.h5'
 numClass = 20
 m_population = 9
 cm_all = np.zeros((numClass, numClass, m_population))
+batch = 120
 for m_test in range(m_population):
     # training index is population removing test subject
     m_train = list(range(m_population))
@@ -62,7 +63,6 @@ for m_test in range(m_population):
     val_loss = []
     patience = 100 # this does not need too much patience as converges to 100% very fast
     epoch = 50000
-    batch = 120
     model, history = tools.train_step(model, epoch, X_train, y_train, X_valid, y_valid, 
                                       modelsavefile, Patience = patience, batch_size = batch)
     acc, val_acc, loss, val_loss = tools.append_history(history, acc, val_acc, loss, val_loss)
