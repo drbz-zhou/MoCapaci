@@ -11,6 +11,7 @@ import itertools
 import matplotlib.pyplot as plt
 from tensorflow import keras
 from datetime import datetime
+import csv
 
 def tf_mem_patch():
     # to cure tensorflow memory allocation problem
@@ -164,3 +165,19 @@ def cm2acc(cm):
     for i in range(cm.shape[0]):
         tp+=cm[i,i]
     return tp/(sum(sum(cm)))
+
+def create_log(file_path, header = ['condition', 'best_valid_loss', 'best_valid_acc', 'test_acc']):
+    now = datetime.now()
+    date_time = now.strftime("%m-%d-%H-%M-%S")
+    f = open(file_path+"log-"+date_time+'.csv', 'w',
+                        encoding='utf-8', newline='')
+    wr = csv.writer(f)
+    wr.writerow(header)
+    f.close()
+    return f
+def write_log_line(f, line =  ['condition', 'best_valid_loss', 'best_valid_acc', 'test_acc']):
+    f = open(f.name, 'a', encoding='utf-8', newline='')
+    wr = csv.writer(f)
+    wr.writerow(line)
+    f.close()
+    return f
