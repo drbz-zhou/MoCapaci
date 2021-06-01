@@ -16,9 +16,9 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LRO/'
-model_list = ['Conv1D_noflat'] #'Conv1D','TConv','ResConv1D','LSTM','Conv1D_LSTM','Conv_LSTM','TfEncoder','Conv1D_noflat'
+model_list = ['Conv1D'] #'Conv1D','TConv','ResConv1D','LSTM','Conv1D_LSTM','Conv_LSTM','TfEncoder','Conv1D_noflat'
 numClass = 20
-m_population = 10
+m_population = 14
 cm_all = np.zeros((numClass, numClass, 0))
 batch = 100
 numRec = 5
@@ -26,8 +26,8 @@ logFile = tools.create_log(outfolder,['condition','best valid acc','best test ac
 
 
 for model_type in model_list:
-    modelsavefile = 'model/'+model_type+'.h5'
     for m_rec in range(numRec):
+        modelsavefile = 'model/'+model_type+'_LRO_'+str(m_rec)+'.h5'
         # leave recording out
         X_train, X_valid, X_test, y_train, y_valid, y_test = DP.Group_LeaveRecOut(list(range(m_population)), m_rec)
         

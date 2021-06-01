@@ -19,9 +19,9 @@ session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LPO_AS/'
 model_type = 'Conv1D'  # Conv1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
-modelsavefile = 'model/'+model_type+'_LPO_AS.h5'
+
 numClass = 20
-m_population = 10
+m_population = 14
 batch = 100
 cm_all = np.zeros((numClass, numClass, 0))
 logFile = tools.create_log(outfolder,['condition','testID','validID','best valid acc','best test acc'])
@@ -41,6 +41,8 @@ for m_test in range(m_population):
         for m_id in m_valid1:
             m_train.remove(m_id)
             str_valid+=str(m_id)
+        
+        modelsavefile = 'model/'+model_type+'_LPO_'+str(m_test)+'_'+str_valid+'.h5'
         # prepare data
         X_train, X_valid, X_test, y_train, y_valid, y_test = DP.LeavePersonOut_AllStrangers(m_train,m_valid1,[m_test])
     
@@ -92,7 +94,7 @@ for m_test in range(m_population):
         
         print(acc_test)
         print(cm)
-        tools.write_log_line(logFile,[model_type+'LPO_'+str(m_test)+'_'+str_valid,
+        tools.write_log_line(logFile,[model_type+'_LPO_'+str(m_test)+'_'+str_valid,
                                       m_test,str_valid,round(val_acc.max(),4),round(acc_test,4)])
 
 cm = np.sum(cm_all,2)
