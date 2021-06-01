@@ -22,7 +22,7 @@ model_type = 'Conv1D'  # Conv1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM,
 modelsavefile = 'model/'+model_type+'_LPO_AS.h5'
 numClass = 20
 m_population = 10
-batch = 240
+batch = 100
 cm_all = np.zeros((numClass, numClass, 0))
 logFile = tools.create_log(outfolder,['condition','testID','validID','best valid acc','best test acc'])
 numValid = 1
@@ -48,7 +48,7 @@ for m_test in range(m_population):
         if model_type == 'TConv':
             model = MB.build_TConv(filters = 40, kernel = (40,4), dense=100)
         elif model_type == 'Conv1D':
-            model = MB.build_Conv1D(filters = 40, kernel = (40), dense=100)
+            model = MB.build_Conv1D(filters = 40, kernel = (41), dense=100)
         elif model_type == 'ResConv1D':
             model = MB.build_ResConv1D(filters = 40, kernel = (40), dense=100)
         elif model_type == 'LSTM':
@@ -59,6 +59,8 @@ for m_test in range(m_population):
             model = MB.build_Conv1D_LSTM(conv_filters = 20, conv_kernel = (40), lstm_units = 40, dense = 100, numClass = 20)
         elif model_type == 'TfEncoder':
             model = MB.build_TfEncoder(batch)
+        elif model_type == 'Conv1D_noflat':
+            model = MB.build_Conv1D_noflat(filters = 40, kernel = (40), dense=100)
         
         m_opt = keras.optimizers.Adam(learning_rate=0.00005)
         model.compile(optimizer=m_opt,

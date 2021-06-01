@@ -50,7 +50,7 @@ for model_type in model_list:
         elif model_type == 'DC_LSTM':
             model = MB.build_DeepConvLSTM()
         elif model_type == 'Conv1D_noflat':
-            model = MB.build_Conv1D_noflat()
+            model = MB.build_Conv1D_noflat(filters = 40, kernel = (40), dense=100)
             
         # optimizer
         m_opt = keras.optimizers.Adam(learning_rate=0.00005)

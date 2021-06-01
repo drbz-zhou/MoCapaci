@@ -8,3 +8,7 @@ P6: Ivona
 P7: MariaJandra
 P8: Bian
 P9: Joey
+P10: Yuchi
+P11: Siyu
+P12: Carlos
+P13: Li
