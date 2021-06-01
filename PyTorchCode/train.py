@@ -52,8 +52,8 @@ class TrainOps(object):
         valid_dataset = Dataload_fabric(self.data_path, self.valid_idx, self.window_size, self.channel_size)
         valid_loader = DataLoader(valid_dataset, batch_size = self.batch_size, shuffle=True)
 
-        # test_dataset = Dataload_fabric(self.data_path, self.test_idx, self.window_size, self.channel_size)
-        # test_loader = DataLoader(test_dataset, batch_size = self.batch_size, shuffle=True, num_workers=8, pin_memory=True)
+        test_dataset = Dataload_fabric(self.data_path, self.test_idx, self.window_size, self.channel_size)
+        test_loader = DataLoader(test_dataset, batch_size = self.batch_size, shuffle=True, num_workers=8, pin_memory=True)
 
         if self.model == 'DeepConvLSTM':
             net = DeepConvLSTM(n_classes=self.n_classes, n_conv=4, n_layers=2, window_size=self.window_size, n_channels=self.channel_size, drop_prob = 0.5, filter_size=41)
@@ -76,6 +76,7 @@ class TrainOps(object):
         
         train_label = train_dataset.label.reshape(-1,1)
         valid_label = valid_dataset.label.reshape(-1,1)
+        test_label = test_dataset.label.reshape(-1,1)
         # train_label = np.eye(self.n_classes)[train_dataset.label]
         # valid_label = np.eye(self.n_classes)[valid_dataset.label]
         
@@ -84,11 +85,14 @@ class TrainOps(object):
 
         train_stats = np.unique([a for y in train_label for a in y],return_counts=True)[1]
         val_stats = np.unique([a for y in valid_label for a in y],return_counts=True)[1]
+        test_stats = np.unique([a for y in test_label for a in y],return_counts=True)[1]
 
         print('Training set statistics:')
         print(len(train_stats),'classes with distribution',train_stats)
         print('Validation set statistics:')
         print(len(val_stats),'classes with distribution',val_stats)
+        print('Test set statistics:')
+        print(len(test_stats),'classes with distribution',test_stats)
 
         weights = torch.tensor([max(train_stats)/i for i in train_stats],dtype=torch.double)
 
@@ -332,9 +336,9 @@ if __name__ == '__main__':
     train_idx = [0,2,4,5,6,7,8]
     valid_idx = [3]
     test_idx = [1]
-    n_population = 9
+    n_population = 10
     n_iteration = 0
-    for m_test in range(n_population):
+    for m_test in range(0, n_population):
         train_idx = list(range(n_population))
         train_idx.remove(m_test)
         test_idx = [m_test]
@@ -346,7 +350,6 @@ if __name__ == '__main__':
             train_idx.remove(m_valid)
 
             valid_idx = [m_valid]
-
             print('train_idx:',train_idx)
             print('valid_idx:',valid_idx)
             print('test_idx:',test_idx)
@@ -355,7 +358,7 @@ if __name__ == '__main__':
             best_epoch, best_valid_loss, best_valid_acc = train.train_model()
             test_loss, test_acc = train.test_model()
 
-            result_save_path = './testresult/' + args.model + '_' + str(n_population) + '.csv'
+            result_save_path = './testresult/' + args.model + '_' + str(n_population) + '_2maxpool.csv'
             if n_iteration == 1:
                 f = open(result_save_path, 'w',
                         encoding='utf-8', newline='')

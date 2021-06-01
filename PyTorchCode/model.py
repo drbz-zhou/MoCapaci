@@ -18,7 +18,9 @@ class DeepConv1D(nn.Module):
 
         self.conv1 = nn.Sequential(
             nn.Conv1d(n_channels, n_filters, kernel_size=filter_size, padding=filter_size//2 ),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
+            nn.BatchNorm1d(n_filters),
+                    nn.Dropout(p=drop_prob)
         )
         self.conv2 = nn.Sequential(
                     nn.Conv1d(n_filters, n_filters, kernel_size=filter_size, padding=filter_size//2),
@@ -68,10 +70,15 @@ class DeepConvLSTM(nn.Module):
         self.__dict__.update(locals())
 
         # Convolutional net
-        self.convlayer = nn.ModuleList([nn.Conv1d(n_channels, n_filters, (filter_size))]) #First layer should map from number of channels to number of filters
-        self.convlayer.extend([nn.Conv1d(n_filters, n_filters, (filter_size)) for i in range(n_conv-1)]) # Subsequent layers should map n_filters -> n_filters
+        self.convlayer = nn.ModuleList([nn.Conv1d(n_channels, n_filters, (filter_size), padding=filter_size//2)]) #First layer should map from number of channels to number of filters
+        self.convlayer.extend([nn.Conv1d(n_filters, n_filters, (filter_size), padding=filter_size//2) for i in range(n_conv-1)]) # Subsequent layers should map n_filters -> n_filters
 
         self.maxpool = nn.MaxPool1d(10,10)
+        self.batchnorm = nn.Sequential(
+                        nn.ReLU(inplace=True),
+                        nn.BatchNorm1d(n_filters),
+                        nn.Dropout(p=drop_prob),
+        )
 
 		# LSTM layers
         if self.n_layers > 0:
@@ -88,9 +95,15 @@ class DeepConvLSTM(nn.Module):
         #Reshape x if necessary to add the 2nd dimension
         x = x.view(-1, self.n_channels, self.window_size)
 
-        
+        layer_cnt = 0
         for conv in self.convlayer:
             x = conv(x)
+            x = self.batchnorm(x)
+            # print('x:',layer_cnt, x.size())
+            layer_cnt+=1
+            if layer_cnt ==2:
+                x = self.maxpool(x)
+                # print('maxpool:',x.size())
         
         x = self.maxpool(x)
         x = x.view(batch_size, -1, self.n_filters)
