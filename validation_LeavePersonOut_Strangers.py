@@ -18,14 +18,14 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LPO_AS/'
-model_type = 'Cov1D'  # Cov1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
+model_type = 'Conv1D'  # Conv1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
 modelsavefile = 'model/'+model_type+'_LPO_AS.h5'
 numClass = 20
 m_population = 10
 batch = 240
 cm_all = np.zeros((numClass, numClass, 0))
 logFile = tools.create_log(outfolder,['condition','testID','validID','best valid acc','best test acc'])
-numValid = 2
+numValid = 1
 for m_test in range(m_population):
     
     m_train = list(range(m_population))
@@ -47,7 +47,7 @@ for m_test in range(m_population):
         #%% prepare model
         if model_type == 'TConv':
             model = MB.build_TConv(filters = 40, kernel = (40,4), dense=100)
-        elif model_type == 'Cov1D':
+        elif model_type == 'Conv1D':
             model = MB.build_Conv1D(filters = 40, kernel = (40), dense=100)
         elif model_type == 'ResConv1D':
             model = MB.build_ResConv1D(filters = 40, kernel = (40), dense=100)
@@ -60,7 +60,7 @@ for m_test in range(m_population):
         elif model_type == 'TfEncoder':
             model = MB.build_TfEncoder(batch)
         
-        m_opt = keras.optimizers.Adam(learning_rate=0.0001)
+        m_opt = keras.optimizers.Adam(learning_rate=0.00005)
         model.compile(optimizer=m_opt,
                       loss=keras.losses.BinaryCrossentropy(),
                       metrics=['accuracy'])

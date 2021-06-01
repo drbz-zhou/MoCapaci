@@ -16,11 +16,11 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LRO/'
-model_list = ['Cov1D','TConv','ResConv1D'] #'Cov1D','TConv','ResConv1D','LSTM','Conv1D_LSTM','Conv_LSTM','TfEncoder',
+model_list = ['Conv1D_noflat'] #'Conv1D','TConv','ResConv1D','LSTM','Conv1D_LSTM','Conv_LSTM','TfEncoder','Conv1D_noflat'
 numClass = 20
 m_population = 10
 cm_all = np.zeros((numClass, numClass, 0))
-batch = 400
+batch = 100
 numRec = 5
 logFile = tools.create_log(outfolder,['condition','best valid acc','best test acc'])
 
@@ -35,7 +35,7 @@ for model_type in model_list:
         
         if model_type == 'TConv':
             model = MB.build_TConv(filters = 40, kernel = (40,4), dense=100)
-        elif model_type == 'Cov1D':
+        elif model_type == 'Conv1D':
             model = MB.build_Conv1D(filters = 40, kernel = (40), dense=100)
         elif model_type == 'ResConv1D':
             model = MB.build_ResConv1D(filters = 40, kernel = (40), dense=100)
@@ -47,9 +47,13 @@ for model_type in model_list:
             model = MB.build_Conv1D_LSTM(conv_filters = 20, conv_kernel = (40), lstm_units = 40, dense = 100, numClass = 20)
         elif model_type == 'TfEncoder':
             model = MB.build_TfEncoder(batch)
+        elif model_type == 'DC_LSTM':
+            model = MB.build_DeepConvLSTM()
+        elif model_type == 'Conv1D_noflat':
+            model = MB.build_Conv1D_noflat()
             
         # optimizer
-        m_opt = keras.optimizers.Adam(learning_rate=0.0001)
+        m_opt = keras.optimizers.Adam(learning_rate=0.00005)
         #m_opt = keras.optimizers.SGD(learning_rate=0.001, momentum=0.0001)
         #m_opt = keras.optimizers.RMSprop(learning_rate=0.001, momentum=0.0001)
         model.compile(optimizer=m_opt,
@@ -80,6 +84,7 @@ for model_type in model_list:
         print(acc_test)
         print(cm)
         tools.write_log_line(logFile,[model_type+'_LRO_'+str(m_rec),round(val_acc.max(),4),acc_test])
+        
     cm = np.sum(cm_all,2)
     acc = np.sum(cm*np.eye(numClass, numClass)) / np.sum(cm)
     tools.plot_confusion_matrix(cm, range(1, numClass+1), file_path=outfolder+'Result_LRO_'+model_type,acc=acc)
