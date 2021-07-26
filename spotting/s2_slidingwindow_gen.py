@@ -21,16 +21,37 @@ for m_rec in range(0,5):  # 0,5
         data_norm = np.zeros( (len(data), 4) )
         for ch in range(4):
             data_norm[:,ch] = (data[:, ch]-np.mean(data[:,ch]) ) / np.std(data[:,ch])
-        plt.plot(data_norm)
-        plt.show()
+        #plt.plot(data_norm)
+        #plt.show()
         
         X = data_norm
         y = np.zeros(len(X))
         for i in range(0, len(label)):
             for j in range(label[i,0],label[i,1]):
                 y[j]=label[i,2]
-        plt.plot(y)
-        plt.show()
+        #plt.plot(y)
+        #plt.show()
         
         np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_X", X)
         np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
+        
+        # sliding window
+        win_ratio = 0.75
+        win_size = 400
+        win_step = 100
+        win_amount = int( (len(X)-win_size)/win_step )
+        X_sw = []
+        y_sw = []
+        for i in range(0, win_amount):
+            w_start = i*win_step
+            w_end   = w_start + win_size
+            X_sw.append(X[w_start:w_end,:])
+            u,v = np.unique(y[w_start:w_end], return_counts=True)
+            y_temp = 0
+            if np.argmax(v) > win_ratio*win_size:  # if majority > win_ratio of window
+                y_temp = int(u[np.argmax(v)])
+            y_sw.append(y_temp)
+        
+        np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_X_sw", X)
+        np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_y_sw", y)
+        
