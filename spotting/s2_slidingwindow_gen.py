@@ -36,7 +36,7 @@ for m_rec in range(0,5):  # 0,5
         #np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
         
         # without normalize
-        np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_X", data)
+        np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_X", data-np.mean(data[0:100,:],0))
         np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
         
         # sliding window
