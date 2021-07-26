@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 for m_rec in range(0,5):  # 0,5
-    for m_Person in [9]:
+    for m_Person in [13]:
         data = np.load("DataExp/P" + str(m_Person) + "_" + str(m_rec) + "_np.npy")
         label = np.load("Labels/P" + str(m_Person) + "_" + str(m_rec) + "_L_np.npy")
         
@@ -32,16 +32,19 @@ for m_rec in range(0,5):  # 0,5
         #plt.plot(y)
         #plt.show()
         
-        #np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_X", X)
-        #np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
+        np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_X", X)
+        np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
         
-        # without normalize
+        # without 1 second normalize
+        '''
         X_wo_norm = (data-np.mean(data[0:100,:],0))/20
         np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_X", X_wo_norm)
         np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
         plt.plot(X_wo_norm)
         plt.show()
+        '''
         # sliding window
+        '''
         win_ratio = 0.75
         win_size = 400
         win_step = 100
@@ -63,3 +66,4 @@ for m_rec in range(0,5):  # 0,5
         
         #plt.plot(y_sw)
         #plt.show()
+        '''

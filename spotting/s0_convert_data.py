@@ -9,7 +9,7 @@ import math
 
 if __name__ == '__main__':
     for m_rec in range(0,5):
-        for m_Person in [9]:
+        for m_Person in [13]:
             # read data 
             file_data = "DataExp/P" + str(m_Person) + "_" + str(m_rec) + ".csv"
             data_1 = pd.read_csv(file_data, delimiter=',',
