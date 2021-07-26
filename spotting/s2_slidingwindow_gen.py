@@ -36,9 +36,11 @@ for m_rec in range(0,5):  # 0,5
         #np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
         
         # without normalize
-        np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_X", data-np.mean(data[0:100,:],0))
+        X_wo_norm = (data-np.mean(data[0:100,:],0))/20
+        np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_X", X_wo_norm)
         np.save("data_wo_norm/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
-        
+        plt.plot(X_wo_norm)
+        plt.show()
         # sliding window
         win_ratio = 0.75
         win_size = 400
