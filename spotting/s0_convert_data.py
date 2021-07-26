@@ -9,7 +9,7 @@ import math
 
 if __name__ == '__main__':
     for m_rec in range(0,5):
-        for m_Person in range(9):
+        for m_Person in [9]:
             # read data 
             file_data = "DataExp/P" + str(m_Person) + "_" + str(m_rec) + ".csv"
             data_1 = pd.read_csv(file_data, delimiter=',',
@@ -25,7 +25,7 @@ if __name__ == '__main__':
             data_f = data_1[['Pitch1','Volume1','Pitch2','Volume2']]
             data_np = data_f.to_numpy()
             
-            np.save("DataExp/" + str(m_Person) + "_" + str(m_rec) + "_np", data_np)
+            np.save("DataExp/P" + str(m_Person) + "_" + str(m_rec) + "_np", data_np)
             # read label
             file_label = "Labels/P" + str(m_Person) + "_" + str(m_rec) + "_L.csv"
             labels = pd.read_csv(file_label, delimiter=',',
@@ -37,4 +37,4 @@ if __name__ == '__main__':
             label_f = labels[['go_g','relax_g','fig_id']]
             label_np = label_f.to_numpy()
      
-            np.save("Labels/" + str(m_Person) + "_" + str(m_rec) + "_L_np", label_np)
+            np.save("Labels/P" + str(m_Person) + "_" + str(m_rec) + "_L_np", label_np)
