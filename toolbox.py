@@ -125,10 +125,13 @@ def plot_acc_loss(acc, val_acc, loss, val_loss, if_save = True, file_path = ''):
         plt.show()
     return figure
 
-def print_time():
+def get_time_str():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    print("Current Time =", current_time)
+    return current_time
+    
+def print_time():
+    print("Current Time =", get_time_str())
 
 
 def train_valid_split_jump(source_list, m_ratio):

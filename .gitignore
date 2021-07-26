@@ -1,3 +1,4 @@
 outputs/
 model/
 __pycache__/
+spotting/archive/

@@ -18,11 +18,11 @@ from sklearn.metrics import confusion_matrix
 session = tools.tf_mem_patch()
 
 outfolder = 'outputs/LPO_AS/'
-model_type = 'Conv1D'  # Conv1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
+model_type = 'TConv'  # Conv1D, TConv, LSTM, Conv_LSTM, TfEncoder, Conv1D_LSTM, ResConv1D
 
 numClass = 20
 m_population = 14
-batch = 100
+batch = 200
 cm_all = np.zeros((numClass, numClass, 0))
 logFile = tools.create_log(outfolder,['condition','testID','validID','best valid acc','best test acc'])
 numValid = 1
