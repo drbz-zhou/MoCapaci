@@ -7,15 +7,16 @@ Created on Fri May 21 22:37:39 2021
 import numpy as np
 import toolbox as tools
 
-def loadXY(m_person):
-    X=np.load('data/P'+str(m_person)+'_X.npy')
-    y=np.load('data/P'+str(m_person)+'_y.npy')
-    y=y-1
+def loadXY(m_person, m_rec):
+    X=np.load("data/P" + str(m_person) + "_" + str(m_rec) + "_X_sw.npy")
+    y=np.load("data/P" + str(m_person) + "_" + str(m_rec) + "_y_sw.npy")
+    X=np.expand_dims(X,3)
+    # no y=y-1
     return X, y
 
 def Individual_LeaveRecOut(m_person=1, m_rec=0):
-    numClass = 20
-    X, y = loadXY(m_person)
+    numClass = 21
+    X, y = loadXY(m_person, m_rec)
     #expanding dim only needed if channels are taken into the 2D format, virtually adding 1 channel at the end of dims
     X=np.expand_dims(X,3)
     #train-valid-test

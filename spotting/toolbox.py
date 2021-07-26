@@ -44,6 +44,19 @@ def train_step(model, epoch, m_data_train, m_y_train, m_data_valid, m_y_valid, m
         )
     return model, history
 
+def train_step_open(model, epoch, m_data_train, m_y_train, modelsavefile,  batch_size=50, weights_only=True):
+    #cb_checkpoint = keras.callbacks.ModelCheckpoint(modelsavefile, monitor='val_accuracy', mode='max', 
+                                                    #verbose=1, save_weights_only=weights_only, save_best_only=True)
+    #cb_earlystop = keras.callbacks.EarlyStopping(patience=Patience, monitor='val_accuracy', verbose = 1, restore_best_weights=True )
+    history = model.fit( x = m_data_train, y = m_y_train, epochs = epoch, batch_size=batch_size,
+              #use_multiprocessing = True,
+              #validation_data = (m_data_valid, m_y_valid),
+              #callbacks=[cb_checkpoint, cb_earlystop],
+              #callbacks=[cb_earlystop],  #sometimes can't save model because of h5 bug, early stop restore best weights
+              verbose = 2
+        )
+    return model, history
+
 def train_gen(model, epoch, m_datagen_train, m_datagen_valid, modelsavefile, Patience = 50, Batch_size = 32, weights_only=True):
     cb_checkpoint = keras.callbacks.ModelCheckpoint(modelsavefile, monitor='val_accuracy', mode='max', 
                                                     verbose=1, save_weights_only=weights_only,save_best_only=True)

@@ -32,8 +32,8 @@ for m_rec in range(0,5):  # 0,5
         #plt.plot(y)
         #plt.show()
         
-        np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_X", X)
-        np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
+        np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_X", X)
+        np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_y", y)
         
         # sliding window
         win_ratio = 0.75
@@ -48,10 +48,12 @@ for m_rec in range(0,5):  # 0,5
             X_sw.append(X[w_start:w_end,:])
             u,v = np.unique(y[w_start:w_end], return_counts=True)
             y_temp = 0
-            if np.argmax(v) > win_ratio*win_size:  # if majority > win_ratio of window
+            if np.max(v) > win_ratio*win_size:  # if majority > win_ratio of window
                 y_temp = int(u[np.argmax(v)])
             y_sw.append(y_temp)
         
-        np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_X_sw", X)
-        np.save("TrainingData/P" + str(m_Person) + "_" + str(m_rec) + "_y_sw", y)
+        #np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_X_sw", X_sw)
+        #np.save("data/P" + str(m_Person) + "_" + str(m_rec) + "_y_sw", y_sw)
         
+        #plt.plot(y_sw)
+        #plt.show()
