@@ -4,8 +4,8 @@ Created on Mon Jul 26 10:44:43 2021
 
 @author: bzhou
 """
-
 import numpy as np
+
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
